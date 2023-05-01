@@ -5,5 +5,62 @@ Il problema richiede di trovare il prodotto più grande di una sottostringa cont
 ## Soluzione
 La soluzione consiste in due cicli for annidati: il primo ciclo for scorre la stringa di cifre dall'inizio alla fine, il secondo ciclo for, che è interno al primo, scorre ogni serie di cifre di lunghezza span all'interno della stringa di cifre. In ogni iterazione del secondo ciclo for, viene calcolato il prodotto delle cifre nella serie utilizzando l'operatore di moltiplicazione. Se il prodotto ottenuto è maggiore del più grande prodotto calcolato fino a quel momento, il prodotto diventa il nuovo più grande prodotto. Prima di iniziare i cicli for, il metodo effettua alcune verifiche: se la lunghezza della serie di cifre span è negativa o supera la lunghezza della stringa di cifre digits, il metodo lancia un'eccezione. Inoltre, se la serie di cifre contiene caratteri non numerici, il metodo lancia un'altra eccezione.
 
-![Screenshot 2023-05-01 100246](https://user-images.githubusercontent.com/113766707/235426805-ab5f346b-2aa4-4669-8892-9697957bf984.png)
-![Screenshot 2023-05-01 100159](https://user-images.githubusercontent.com/113766707/235426835-b9059f5d-dc6c-4b9a-8116-336563b7ed01.png)
+    using System;
+
+
+    public static class LargestSeriesProduct
+    {
+      
+      public static long GetLargestProduct(string digits, int span)
+      {
+          
+        // Controlla se lo span è negativo o più grande della lunghezza della stringa digits.
+        if (span < 0 || span > digits.Length)
+        {
+          
+        throw new ArgumentException("Non e valido");
+        }
+        
+        // Se lo span è uguale a zero, restituisce 1.
+        if (span == 0)
+        {
+            return 1;
+        }
+        
+        // Variabile per tenere traccia del prodotto più grande trovato finora.
+        long largestProduct = 0;
+        
+        // Cicla su tutti i possibili sottoinsiemi di span numeri consecutivi all'interno di digits.
+        for (int i = 0; i <= digits.Length - span; i++)
+        {
+            // Variabile per tenere traccia del prodotto della sequenza corrente.
+            long product = 1;
+            
+            // Cicla sui singoli numeri della sequenza corrente.
+            for (int j = 0; j < span; j++)
+            {
+                // Prende il j-esimo carattere della sequenza corrente.
+                char c = digits[i + j];
+                
+                // Se il carattere non è un numero, lancia un'eccezione.
+                if (!char.IsDigit(c))
+                {
+                    throw new ArgumentException("Span con caratteri invalido");
+                }
+                
+                // Calcola il prodotto moltiplicando il valore numerico del carattere per il prodotto corrente.
+                product *= (long)(c - '0');
+            }
+            
+            // Se il prodotto corrente è più grande del prodotto più grande trovato finora, lo aggiorna.
+            if (product > largestProduct)
+            {
+                largestProduct = product;
+            }
+        }
+        
+        // Restituisce il prodotto più grande trovato.
+        return largestProduct;
+      }
+    }
+
